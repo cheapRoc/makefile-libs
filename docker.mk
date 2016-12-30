@@ -8,10 +8,10 @@ REGISTRY_HOST ?= docker-dev.rxcorp.com
 REGISTRY_TAG = $(REGISTRY_HOST)/$(IMAGE_TAG)
 
 build-image:
-	@echo docker build -t $(CONTAINER_IMAGE) .
+	docker build -t $(CONTAINER_IMAGE) .
 
 version-image: version build-image
-	@echo docker tag $(CONTAINER_IMAGE) $(IMAGE_TAG)
+	docker tag $(CONTAINER_IMAGE) $(IMAGE_TAG)
 
 register-image: version-image
 	docker tag $(IMAGE_TAG) $(REGISTRY_TAG)
