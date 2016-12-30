@@ -13,15 +13,13 @@ HASH_STASH ?= .LABEL_VERSION
 VERSION_FILE ?= VERSION
 VERSION_NUMBER = $(MAJOR_VERSION).$(MINOR_VERSION).$(PATCH_VERSION)
 
-.PHONY: build
-
-version-reset:
+reset-version:
 	@if test -f $(MAJOR_STASH); then rm $(MAJOR_STASH); fi
 	@if test -f $(MINOR_STASH); then rm $(MINOR_STASH); fi
 	@if test -f $(PATCH_STASH); then rm $(PATCH_STASH); fi
 	@if test -f $(HASH_STASH); then rm $(HASH_STASH); fi
 
-clean: version-reset
+clean: reset-version
 
 $(MAJOR_STASH):
 	@if ! test -f $(MAJOR_STASH); then echo $(MAJOR_VERSION) > $(MAJOR_STASH); fi
@@ -38,13 +36,13 @@ $(HASH_STASH):
 VERSION_NUMBER = $$(cat $(MAJOR_STASH)).$$(cat $(MINOR_STASH)).$$(cat $(PATCH_STASH))
 FULL_VERSION = $(VERSION_NUMBER)-$(LABEL_VERSION)
 
-full-version: $(PATCH_STASH) $(MINOR_STASH) $(MAJOR_STASH) $(HASH_STASH)
+version: $(PATCH_STASH) $(MINOR_STASH) $(MAJOR_STASH) $(HASH_STASH)
+
+full-version: version
 	@echo $(FULL_VERSION)
 
-hash-version: $(HASH_STASH)
-	@echo $(LABEL_VERSION)
-
-version: $(PATCH_STASH) $(MINOR_STASH) $(MAJOR_STASH) $(HASH_STASH)
+short-version: version
 	@echo $(VERSION_NUMBER)
 
-
+hash-version: version
+	@echo $(LABEL_VERSION)
