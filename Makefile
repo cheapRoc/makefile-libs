@@ -1,9 +1,11 @@
-CONTAINER_NAME = devops/test
+CONTAINER_APP = test
+CONTAINER_TEAM = devops
 
 .PHONY: build
 
-build: version
-	@echo docker build -t $(CONTAINER_NAME):$(VERSION_NUMBER) .
+build: build-image version-image
+
+publish: build publish-image
 
 include version.mk
 include docker.mk
