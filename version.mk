@@ -1,0 +1,38 @@
+CONTAINER_NAME = devops/test
+
+MAJOR_VERSION ?= 1
+MINOR_VERSION ?= 0
+PATCH_VERSION ?= 0
+HASH_VERSION ?= HEAD
+
+MAJOR_STASH ?= .MAJOR_VERSION
+MINOR_STASH ?= .MINOR_VERSION
+PATCH_STASH ?= .PATCH_VERSION
+HASH_STASH ?= .HASH_VERSION
+
+VERSION_FILE ?= VERSION
+VERSION_NUMBER ?= $(MAJOR_VERSION).$(MINOR_VERSION).$(PATCH_VERSION)-$(LABEL_VERSION)
+
+.PHONY: build
+
+reset:
+	@if test -f $(MAJOR_STASH); then rm $(MAJOR_STASH); fi
+	@if test -f $(MINOR_STASH); then rm $(MINOR_STASH); fi
+	@if test -f $(PATCH_STASH); then rm $(PATCH_STASH); fi
+	@if test -f $(HASH_STASH); then rm $(HASH_STASH); fi
+
+$(MAJOR_STASH):
+	@if ! test -f $(MAJOR_STASH); then echo $(MAJOR_VERSION) > $(MAJOR_STASH); fi
+
+$(MINOR_STASH):
+	@if ! test -f $(MINOR_STASH); then echo $(MINOR_VERSION) > $(MINOR_STASH); fi
+
+$(PATCH_STASH):
+	@if ! test -f $(PATCH_STASH); then echo $(PATCH_VERSION) > $(PATCH_STASH); fi
+
+$(HASH_STASH):
+	@if ! test -f $(HASH_STASH); then echo $(HASH_VERSION) > $(HASH_STASH); fi
+
+version: $(PATCH_STASH) $(MINOR_STASH) $(MAJOR_STASH) $(HASH_STASH)
+	@echo $(MAJOR_VERSION).$(MINOR_VERSION).$$(cat $(PATCH_STASH))-$(LABEL_VERSION)
+
