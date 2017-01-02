@@ -7,7 +7,7 @@ IMAGE_TAG = $(CONTAINER_IMAGE):$(CONTAINER_TAG)
 REGISTRY_HOST ?= docker-dev.rxcorp.com
 REGISTRY_TAG = $(REGISTRY_HOST)/$(IMAGE_TAG)
 
-debug-image:
+debug-image: version
 	@echo
 	@echo "\033[90mCONTAINER_APP\033[0m: $(CONTAINER_APP)"
 	@echo "\033[90mCONTAINER_TEAM\033[0m: $(CONTAINER_TEAM)"
