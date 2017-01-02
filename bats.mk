@@ -1,2 +1,2 @@
 bats-test:
-	bats test/suite.bats
+	bats test/*.bats
