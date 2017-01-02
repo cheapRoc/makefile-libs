@@ -11,9 +11,10 @@ PATCH_STASH ?= .PATCH_VERSION
 HASH_STASH ?= .LABEL_VERSION
 
 VERSION_FILE ?= VERSION
+LAST_VERSION_FILE ?= .LAST_VERSION
 VERSION_NUMBER = $(MAJOR_VERSION).$(MINOR_VERSION).$(PATCH_VERSION)
 
-clean: reset-version
+#clean: reset-version
 
 reset-version:
 	@if test -f $(MAJOR_STASH); then rm $(MAJOR_STASH); fi
@@ -46,8 +47,7 @@ $(PATCH_STASH):
 	@if ! test -f $(PATCH_STASH); then echo 0 > $(PATCH_STASH); fi
 
 $(HASH_STASH):
-	@if test -n "$(LABEL_VERSION)"; then echo $(LABEL_VERSION) > $(HASH_STASH); fi
-	@if ! test -f $(HASH_STASH); then echo $(COMMIT_HASH) > $(HASH_STASH); fi
+	@echo $(LABEL_VERSION) > $(HASH_STASH)
 
 VERSION_NUMBER = $$(cat $(MAJOR_STASH)).$$(cat $(MINOR_STASH)).$$(cat $(PATCH_STASH))
 FULL_VERSION = $(VERSION_NUMBER)-$(LABEL_VERSION)
@@ -62,3 +62,8 @@ short-version: version
 
 hash-version: version
 	@echo $(LABEL_VERSION)
+
+release-version: version
+	@if test -f $(VERSION_FILE); then mv $(VERSION_FILE) $(LAST_VERSION_FILE); fi
+	@echo $(FULL_VERSION) > $(VERSION_FILE)
+	@echo "Dropped version $(FULL_VERSION)"
